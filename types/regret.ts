@@ -6,4 +6,5 @@ export interface Regret {
   color: string;
   createdAt: string;
   views: number;
+  rotate: number;
 }

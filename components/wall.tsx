@@ -3,6 +3,7 @@
 import { Regret } from "@/types/regret";
 import { useEffect, useState } from "react";
 import RegretCard from "./regret-card";
+import { generateRotate } from "@/lib/utils";
 
 export default function Wall() {
   const [regrets, setRegrets] = useState<Regret[]>([]);
@@ -11,7 +12,7 @@ export default function Wall() {
     fetch("/api/regrets")
       .then((r) => r.json())
       .then((data) => {
-        setRegrets(data);
+        setRegrets(data.map((r: Regret) => ({ ...r, rotate: generateRotate() })));
       });
   }, []);
 
