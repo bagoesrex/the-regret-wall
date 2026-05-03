@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Newsreader } from "next/font/google";
+import { Newsreader, Inter, Caveat } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 
@@ -7,6 +7,13 @@ const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -22,7 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`h-full antialiased`}>
-      <body className={`${newsreader.variable} font-news flex min-h-full flex-col`}>
+      <body
+        className={`${newsreader.variable} ${caveat.variable} font-news flex min-h-full flex-col`}
+      >
         <Header />
         {children}
       </body>
