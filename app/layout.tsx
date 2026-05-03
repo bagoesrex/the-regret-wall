@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Newsreader, Inter, Caveat } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
+import QueryProvider from "@/providers/query-provider";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -32,8 +33,10 @@ export default function RootLayout({
       <body
         className={`${newsreader.variable} ${caveat.variable} font-news flex min-h-full flex-col`}
       >
-        <Header />
-        {children}
+        <QueryProvider>
+          <Header />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
