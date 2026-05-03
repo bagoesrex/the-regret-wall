@@ -1,12 +1,12 @@
 "use server";
 
 import { ActionResponse } from "@/types/response";
-import { desc, InferSelectModel } from "drizzle-orm";
-import { regrets } from "@/db/schema";
+import { desc, InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { db } from "@/db/drizzle";
 import { regrets as regretTable } from "@/db/schema";
 
-export type Regret = InferSelectModel<typeof regrets>;
+export type Regret = InferSelectModel<typeof regretTable>;
+export type newRegret = InferInsertModel<typeof regretTable>;
 
 export async function getRegrets(limit = 50): Promise<ActionResponse<Regret[]>> {
   try {
@@ -24,6 +24,23 @@ export async function getRegrets(limit = 50): Promise<ActionResponse<Regret[]>> 
     return {
       success: false,
       message: "Failed to fetch regrets",
+      data: null,
+    };
+  }
+}
+
+export async function createRegret(data: newRegret): Promise<ActionResponse<Regret>> {
+  try {
+    const [regret] = await db.insert(regretTable).values(data).returning();
+    return {
+      success: true,
+      message: "Create regret successfully",
+      data: regret,
+    };
+  } catch {
+    return {
+      success: false,
+      message: "Failed to create regret",
       data: null,
     };
   }
