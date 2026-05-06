@@ -1,4 +1,4 @@
-import { Regret } from "@/types/regret";
+import { Regret } from "@/actions/regrets";
 
 interface RegretCardProps {
   regret: Regret;
