@@ -30,8 +30,35 @@ export async function getRegrets(limit = 50): Promise<ActionResponse<Regret[]>> 
 }
 
 export async function createRegret(data: NewRegret): Promise<ActionResponse<Regret>> {
+  const trimmedMessage =
+    typeof data.message === "string" ? (data.message.trim() ? data.message.trim() : null) : null;
+
+  if (trimmedMessage && trimmedMessage.length > 120) {
+    return {
+      success: false,
+      message: "Message must be 120 characters or less",
+      data: null,
+    };
+  }
+
+  const hasCanvas = typeof data.canvas === "object" && data.canvas !== null;
+  const hasMessage = !!trimmedMessage;
+  if (!hasCanvas && !hasMessage) {
+    return {
+      success: false,
+      message: "Message or canvas is required",
+      data: null,
+    };
+  }
+
   try {
-    const [regret] = await db.insert(regretTable).values(data).returning();
+    const [regret] = await db
+      .insert(regretTable)
+      .values({
+        ...data,
+        message: trimmedMessage,
+      })
+      .returning();
     return {
       success: true,
       message: "Create regret successfully",

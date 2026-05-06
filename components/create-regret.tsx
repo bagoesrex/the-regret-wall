@@ -17,6 +17,8 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
   const [submitting, setSubmitting] = useState(false);
   const [showCanvas, setShowCanvas] = useState(false);
   const [canvasObjectCount, setCanvasObjectCount] = useState(0);
+  const [hasEverOpenedCanvas, setHasEverOpenedCanvas] = useState(false);
+  const colorRef = useRef(color);
 
   const canvasElRef = useRef<HTMLCanvasElement | null>(null);
   const canvasWrapRef = useRef<HTMLDivElement | null>(null);
@@ -70,6 +72,10 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
   }, [canvasObjectCount, message, submitting]);
 
   useEffect(() => {
+    colorRef.current = color;
+  }, [color]);
+
+  useEffect(() => {
     if (!showCanvas) return;
     if (!canvasElRef.current || !canvasWrapRef.current) return;
     if (fabricRef.current) return;
@@ -89,7 +95,7 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
       f.isDrawingMode = true;
       f.freeDrawingBrush = new mod.PencilBrush(f);
       f.freeDrawingBrush.width = 6;
-      (f.freeDrawingBrush as unknown as { color: string }).color = color;
+      (f.freeDrawingBrush as unknown as { color: string }).color = colorRef.current;
 
       const wrap = canvasWrapRef.current!;
       const resize = () => {
@@ -116,17 +122,21 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
       disposed = true;
       ro?.disconnect();
       ro = null;
-      fabricRef.current?.dispose();
-      fabricRef.current = null;
-      setCanvasObjectCount(0);
     };
-  }, [showCanvas, color]);
+  }, [showCanvas]);
 
   useEffect(() => {
     const f = fabricRef.current;
     if (!f || !f.freeDrawingBrush) return;
     (f.freeDrawingBrush as unknown as { color: string }).color = color;
   }, [color]);
+
+  useEffect(() => {
+    return () => {
+      fabricRef.current?.dispose();
+      fabricRef.current = null;
+    };
+  }, []);
 
   function handleClearCanvas() {
     const f = fabricRef.current;
@@ -137,10 +147,15 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 sm:items-center sm:px-0">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="font-caveat relative flex w-full max-w-md rotate-2 flex-col gap-4 rounded-sm bg-white p-6 shadow-xl">
+      <div
+        role="dialog"
+        aria-modal="true"
+        className="font-caveat relative my-auto flex w-full max-w-md rotate-2 flex-col gap-4 overflow-y-auto rounded-sm bg-white p-4 shadow-xl sm:p-6"
+        style={{ maxHeight: "calc(100dvh - 2rem)" }}
+      >
         <h2 className="text-2xl" style={{ color }}>
           leave your regret
         </h2>
@@ -148,7 +163,13 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
         <div className="flex items-center justify-between">
           <button
             type="button"
-            onClick={() => setShowCanvas((v) => !v)}
+            onClick={() => {
+              setShowCanvas((v) => {
+                const next = !v;
+                if (next) setHasEverOpenedCanvas(true);
+                return next;
+              });
+            }}
             className="text-sm opacity-30 transition-opacity hover:opacity-60"
           >
             {showCanvas ? "hide drawing" : "add drawing"}
@@ -170,11 +191,11 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
           ))}
         </div>
 
-        {showCanvas ? (
-          <div className="flex flex-col gap-2">
+        {hasEverOpenedCanvas ? (
+          <div className={`flex flex-col gap-2 ${showCanvas ? "" : "hidden"}`}>
             <div
               ref={canvasWrapRef}
-              className="h-56 w-full overflow-hidden rounded-sm border border-black/10"
+              className="h-44 w-full overflow-hidden rounded-sm border border-black/10 sm:h-56"
             >
               <canvas ref={canvasElRef} />
             </div>
@@ -198,7 +219,7 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
           onChange={(e) => setMessage(e.target.value)}
           placeholder="something you wish you did differently..."
           maxLength={120}
-          rows={5}
+          rows={4}
           autoFocus
           className="w-full resize-none bg-transparent text-lg leading-relaxed outline-none"
           style={{ color }}
