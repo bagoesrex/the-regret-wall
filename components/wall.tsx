@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import RegretCard from "./regret-card";
-import { generateRotate } from "@/lib/utils";
+import { generateRotate } from "@/lib/regret";
 import { Plus } from "lucide-react";
 import CreateRegret from "./create-regret";
 import { useRegrets } from "@/hooks/use-regrets";
