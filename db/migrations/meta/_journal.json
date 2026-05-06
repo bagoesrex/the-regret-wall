@@ -8,6 +8,13 @@
       "when": 1777667698300,
       "tag": "0000_colorful_ted_forrester",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778089306858,
+      "tag": "0001_gifted_banshee",
+      "breakpoints": true
     }
   ]
 }
