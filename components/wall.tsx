@@ -1,26 +1,46 @@
 "use client";
 
-import { Regret } from "@/types/regret";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import RegretCard from "./regret-card";
 import { generateRotate } from "@/lib/utils";
+import { Plus } from "lucide-react";
+import CreateRegret from "./create-regret";
+import { useRegrets } from "@/hooks/use-regrets";
+import { Regret } from "@/actions/regrets";
 
 export default function Wall() {
-  const [regrets, setRegrets] = useState<Regret[]>([]);
+  const { data } = useRegrets();
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    fetch("/api/regrets")
-      .then((r) => r.json())
-      .then((data) => {
-        setRegrets(data.map((r: Regret) => ({ ...r, rotate: generateRotate() })));
-      });
-  }, []);
+  const regrets =
+    data?.data?.map((r: Regret) => ({
+      ...r,
+      rotate: generateRotate(),
+    })) ?? [];
 
   return (
-    <div className="grid grid-cols-5 gap-8">
-      {regrets.map((regret) => (
-        <RegretCard key={regret.id} regret={regret} />
-      ))}
+    <div className="relative">
+      <div className="grid grid-cols-5 gap-8">
+        {regrets.map((regret) => (
+          <RegretCard key={regret.id} regret={regret} />
+        ))}
+      </div>
+
+      <button
+        onClick={() => setOpen(true)}
+        className="fixed right-8 bottom-10 flex h-14 w-14 items-center justify-center rounded-full border-2 border-gray-300 bg-white shadow-xl"
+      >
+        <Plus />
+      </button>
+
+      {open && (
+        <CreateRegret
+          onClose={() => setOpen(false)}
+          onSubmitted={() => {
+            return;
+          }}
+        />
+      )}
     </div>
   );
 }

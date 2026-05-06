@@ -5,7 +5,7 @@ import { desc, InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { db } from "@/db/drizzle";
 import { regrets as regretTable } from "@/db/schema";
 
-export type Regret = InferSelectModel<typeof regretTable>;
+export type Regret = InferSelectModel<typeof regretTable> & { rotate?: number };
 export type newRegret = InferInsertModel<typeof regretTable>;
 
 export async function getRegrets(limit = 50): Promise<ActionResponse<Regret[]>> {
