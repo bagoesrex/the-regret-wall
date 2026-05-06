@@ -20,9 +20,11 @@ export default function Wall() {
 
   return (
     <div className="relative">
-      <div className="grid grid-cols-5 gap-8">
+      <div className="columns-1 gap-8 space-y-8 sm:columns-2 md:columns-3 lg:columns-5">
         {regrets.map((regret) => (
-          <RegretCard key={regret.id} regret={regret} />
+          <div key={regret.id} className="break-inside-avoid">
+            <RegretCard regret={regret} />
+          </div>
         ))}
       </div>
 
