@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Newsreader, Inter, Caveat } from "next/font/google";
+import { Newsreader, Caveat } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import QueryProvider from "@/providers/query-provider";

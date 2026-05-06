@@ -19,8 +19,11 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    if (!body?.type) {
-      return NextResponse.json({ message: "Type is required" }, { status: 400 });
+    const hasMessage = typeof body?.message === "string" && body.message.trim().length > 0;
+    const hasCanvas = typeof body?.canvas === "object" && body.canvas !== null;
+
+    if (!hasMessage && !hasCanvas) {
+      return NextResponse.json({ message: "Message or canvas is required" }, { status: 400 });
     }
 
     const res = await createRegret(body);
