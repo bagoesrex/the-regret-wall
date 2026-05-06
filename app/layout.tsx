@@ -21,7 +21,7 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: "The Regret Wall",
-  description: "Leave something you wish you did differently",
+  description: "Leave something you wish, you did differently",
 };
 
 export default function RootLayout({
