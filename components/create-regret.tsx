@@ -3,6 +3,7 @@
 import { useCreateRegret } from "@/hooks/use-regrets";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Canvas as FabricCanvas } from "fabric";
+import { toast } from "sonner";
 
 const COLORS = ["#c4947a", "#7aa0c4", "#a07ac4", "#8fb87a", "#c4a07a", "#7ac4ba"];
 
@@ -52,14 +53,28 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
         };
       }
 
-      await createRegret.mutateAsync({
+      const res = await createRegret.mutateAsync({
         canvas: canvasPayload,
         message: hasText ? trimmed : null,
         color,
       });
 
+      if (!res?.success) {
+        toast.error(res?.message ?? "Failed to create regret", {
+          style: { borderColor: "rgba(239, 68, 68, 0.35)" },
+        });
+        return;
+      }
+
+      toast.success("Regret added", {
+        style: { borderColor: "rgba(34, 197, 94, 0.35)" },
+      });
       onSubmitted();
       onClose();
+    } catch {
+      toast.error("Something went wrong. Please try again.", {
+        style: { borderColor: "rgba(239, 68, 68, 0.35)" },
+      });
     } finally {
       setSubmitting(false);
     }

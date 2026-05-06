@@ -3,6 +3,7 @@ import { Newsreader, Caveat } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import QueryProvider from "@/providers/query-provider";
+import { Toaster } from "sonner";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -37,6 +38,18 @@ export default function RootLayout({
           <Header />
           {children}
         </QueryProvider>
+        <Toaster
+          position="bottom-left"
+          closeButton
+          toastOptions={{
+            style: {
+              background: "var(--background)",
+              color: "var(--foreground)",
+              border: "1px solid rgba(0,0,0,0.08)",
+              borderRadius: "10px",
+            },
+          }}
+        />
       </body>
     </html>
   );
