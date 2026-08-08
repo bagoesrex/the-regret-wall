@@ -1,17 +1,28 @@
+import Link from "next/link";
+
 export default function Header() {
   return (
-    <header className="fixed z-50 w-full px-2">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between rounded-b-xl border border-gray-200 bg-white px-5 py-2.5 pb-4.5">
-        <div className="space-x-2">
-          <span className="relative text-xl font-medium italic">
-            TheRegretWall
-            <span className="absolute top-4 left-0 min-w-60 text-xs text-gray-500 sm:left-20">
-              Leave something you wish, you did differently
-            </span>
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
+      <div className="pointer-events-auto mx-auto flex w-full max-w-5xl items-center justify-between border-b border-black/10 bg-[var(--background)]/90 px-4 py-3 backdrop-blur-md sm:px-6">
+        <Link
+          href="/"
+          aria-label="The Regret Wall home"
+          className="group inline-flex flex-col leading-none"
+        >
+          <span className="font-caveat text-2xl text-black/85 transition-colors group-hover:text-[#c4947a] sm:text-3xl">
+            The Regret Wall
+          </span>
+          <span className="mt-1 text-[0.65rem] tracking-[0.14em] text-black/45 uppercase">
+            a place for things left unsaid
+          </span>
+        </Link>
+
+        <div className="hidden items-center gap-2 text-right sm:flex">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#c4947a]" aria-hidden="true" />
+          <span className="max-w-32 text-xs leading-relaxed text-black/40">
+            Leave something you wish, you did differently.
           </span>
         </div>
-        <div></div>
-        <div></div>
       </div>
     </header>
   );
