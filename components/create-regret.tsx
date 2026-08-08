@@ -6,6 +6,7 @@ import type { Canvas as FabricCanvas } from "fabric";
 import { toast } from "sonner";
 
 const COLORS = ["#c4947a", "#7aa0c4", "#a07ac4", "#8fb87a", "#c4a07a", "#7ac4ba"];
+const COLOR_LABELS = ["terracotta", "blue", "purple", "green", "tan", "teal"];
 
 interface CreateRegretProps {
   onClose: () => void;
@@ -173,11 +174,12 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
       <div
         role="dialog"
         aria-modal="true"
+        aria-labelledby="create-regret-title"
         aria-busy={submitting}
         className="font-caveat relative my-auto flex w-full max-w-md rotate-2 flex-col gap-4 overflow-y-auto rounded-sm bg-white p-4 shadow-xl sm:p-6"
         style={{ maxHeight: "calc(100dvh - 2rem)" }}
       >
-        <h2 className="text-2xl" style={{ color }}>
+        <h2 id="create-regret-title" className="text-2xl" style={{ color }}>
           leave your regret
         </h2>
 
@@ -198,9 +200,12 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
         </div>
 
         <div className="flex items-center gap-2">
-          {COLORS.map((c) => (
+          {COLORS.map((c, index) => (
             <button
               key={c}
+              type="button"
+              aria-label={`Choose ${COLOR_LABELS[index]} color`}
+              aria-pressed={color === c}
               onClick={() => setColor(c)}
               className="h-5 w-5 rounded-full transition-transform hover:scale-110"
               style={{
