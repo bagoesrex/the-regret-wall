@@ -163,11 +163,17 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 sm:items-center sm:px-0">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={() => {
+          if (!submitting) onClose();
+        }}
+      />
 
       <div
         role="dialog"
         aria-modal="true"
+        aria-busy={submitting}
         className="font-caveat relative my-auto flex w-full max-w-md rotate-2 flex-col gap-4 overflow-y-auto rounded-sm bg-white p-4 shadow-xl sm:p-6"
         style={{ maxHeight: "calc(100dvh - 2rem)" }}
       >
@@ -247,7 +253,8 @@ export default function CreateRegret({ onClose, onSubmitted }: CreateRegretProps
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-1.5 text-sm opacity-30 transition-opacity hover:opacity-60"
+              disabled={submitting}
+              className="px-4 py-1.5 text-sm opacity-30 transition-opacity hover:opacity-60 disabled:cursor-not-allowed disabled:opacity-20"
             >
               cancel
             </button>
