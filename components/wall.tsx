@@ -29,7 +29,8 @@ function WallSkeletonCard({ heightClass }: { heightClass: string }) {
 }
 
 export default function Wall() {
-  const { data, isLoading, isFetching, isError } = useRegrets();
+  const { data, isLoading } = useRegrets();
+
   const [open, setOpen] = useState(false);
 
   const regrets =
@@ -56,17 +57,6 @@ export default function Wall() {
             ))}
       </div>
 
-      {isError ? (
-        <div className="mt-10 text-center text-sm text-black/50">
-          Failed to load regrets. Please refresh.
-        </div>
-      ) : null}
-
-      {isFetching && !isLoading ? (
-        <div className="pointer-events-none fixed top-20 left-1/2 z-40 -translate-x-1/2 rounded-full border border-black/10 bg-white/80 px-3 py-1 text-xs text-black/50 shadow-sm backdrop-blur">
-          Updating…
-        </div>
-      ) : null}
 
       <button
         onClick={() => setOpen(true)}
