@@ -29,7 +29,7 @@ function WallSkeletonCard({ heightClass }: { heightClass: string }) {
 }
 
 export default function Wall() {
-  const { data, isError, isFetching, isLoading, refetch } = useRegrets();
+  const { data, isError, isFetching, isLoading, isSuccess, refetch } = useRegrets();
 
   const [open, setOpen] = useState(false);
 
@@ -110,14 +110,16 @@ export default function Wall() {
         </div>
       )}
 
-      <button
-        type="button"
-        aria-label="Leave a regret"
-        onClick={() => setOpen(true)}
-        className="fixed right-8 bottom-10 flex h-14 w-14 items-center justify-center rounded-full border-2 border-gray-300 bg-white shadow-xl"
-      >
-        <Plus aria-hidden="true" />
-      </button>
+      {isSuccess && (
+        <button
+          type="button"
+          aria-label="Leave a regret"
+          onClick={() => setOpen(true)}
+          className="fixed right-8 bottom-10 flex h-14 w-14 items-center justify-center rounded-full border-2 border-gray-300 bg-white shadow-xl"
+        >
+          <Plus aria-hidden="true" />
+        </button>
+      )}
 
       {open && (
         <CreateRegret
